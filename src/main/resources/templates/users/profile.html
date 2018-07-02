@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Polls</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/polls/create">Create</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a sec:authorize="!isAuthenticated()" href="/" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
+                <li><a sec:authorize="!isAuthenticated()" href="/" th:href="@{/auth/register}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/" th:inline="text" th:href="@{'/users/' + ${#httpServletRequest.remoteUser}}"><span class="glyphicon glyphicon-log-out"></span> [[${#httpServletRequest.remoteUser}]]</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<h2></h2>
+<div class="container-fluid">
+    <table class="table table-hover table-condensed">
+        <thead class = "thead-light">
+        <tr>
+            <th scope="col">Votes</th>
+            <th scope="col">Poll Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="poll: ${profile.getPolls()}">
+            <td><a th:text="${poll.getNumberOfVotes()}"></a></td>
+            <td class="click"><a th:href="@{'/polls/voting/vote/' + ${poll.getId()}}" th:text="${poll.getName()}"></a></td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <title>Create Poll</title>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Polls</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li class = "active">
+                    <a href="/polls/create">Create</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a sec:authorize="!isAuthenticated()" href="/" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
+                <li><a sec:authorize="!isAuthenticated()" href="/" th:href="@{/auth/register}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/" th:inline="text" th:href="@{'/users/' + ${#httpServletRequest.remoteUser}}"><span class="glyphicon glyphicon-log-out"></span> [[${#httpServletRequest.remoteUser}]]</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <div class="col-md-6">
+    <div class="form-group">
+        <form th:action="@{/polls/createPoll}" method="post" role="form" modelAttribute = "poll">
+            <form modelAttribute = "answers">
+            <div class="table-responsive">
+                <table class="table"  id="dynamic_field">
+                    <thead class = "thead-light">
+                        <tr class="h3">Poll Name</tr>
+                        <tr><input type="text" name="name" placeholder="Poll Name" class="form-control"></tr>
+                    </thead>
+                    <tr class="h3" >Poll Options</tr>
+                </table>
+                <button type="button" name="add" id="add" class="btn btn-success">Add More</button>
+                <input type = "submit" id="btn-login" class="btn btn-success" value = "Submit"  />
+                <span></span>
+            </div>
+            </form>
+        </form>
+    </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+ $(document).ready(function(){
+      var i=0;
+      $('#add').click(function(){
+           $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="text" name = "answers" placeholder="Poll Option" class="form-control name_list" /></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');
+           i++;
+      });
+      $(document).on('click', '.btn_remove', function(){
+           var button_id = $(this).attr("id");
+           $('#row'+button_id+'').remove();
+      });
+ });
+ </script>

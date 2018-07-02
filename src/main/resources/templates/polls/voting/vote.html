@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="www.thymeleaf.org"
+      xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title  th:text="${poll.getName()}"></title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Polls</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="/">Home</a>
+                </li>
+                <li>
+                    <a href="/polls/create">Create</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a sec:authorize="!isAuthenticated()" href="/" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
+                <li><a sec:authorize="!isAuthenticated()" href="/" th:href="@{/auth/register}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/" th:inline="text" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> [[${#httpServletRequest.remoteUser}]]</a></li>
+                <li><a sec:authorize="isAuthenticated()" href="/" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="col-md-6">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title" th:text="${poll.getName()}">
+                <span class="glyphicon glyphicon-hand-right"></span></h3>
+        </div>
+        <div class="panel-body">
+            <div class="list-group">
+                <a th:each="answer: ${poll.getAnswerList()}" th:href="@{'/polls/voting/results/answer/' + ${answer.getId()}}" class="list-group-item list-group-item-action" th:text="${answer.getName()}"></a>
+            </div>
+            <!--<ul class="list-group">-->
+                <!--<li class="list-group-item list-group-item-action" th:each="answer: ${poll.getAnswerList()}" >-->
+                    <!--<div class="checkbox" th:id="${answer.getId()}">-->
+                        <!--<a th:href="@{'/polls/voting/results/' + ${answer.getId()}}">-->
+                            <!--<label th:text="${answer.getName()}">-->
+                                <!--<input type="checkbox" value="">-->
+                            <!--</label>-->
+                        <!--</a>-->
+                    <!--</div>-->
+                <!--</li>-->
+            <!--</ul>-->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
