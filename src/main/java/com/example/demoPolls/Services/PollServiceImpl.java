@@ -3,6 +3,7 @@ package com.example.demoPolls.Services;
 import com.example.demoPolls.Entities.Poll;
 import com.example.demoPolls.Repositories.base.GenericRepository;
 import com.example.demoPolls.Services.base.PollService;
+import com.example.demoPolls.Validators.base.Validator;
 import org.springframework.stereotype.Service;
 
 import java.io.InvalidObjectException;
@@ -13,11 +14,11 @@ import java.util.List;
 @Service
 public class PollServiceImpl implements PollService {
     private final GenericRepository<Poll> pollRepository;
-//    private final Validator<Poll> productValidator;
+    private final Validator<Poll> pollValidator;
 
-    public PollServiceImpl(GenericRepository<Poll> pollRepository /*, Validator<Product> productValidator*/) {
+    public PollServiceImpl(GenericRepository<Poll> pollRepository, Validator<Poll> pollValidator) {
         this.pollRepository = pollRepository;
-//        this.productValidator = productValidator;
+        this.pollValidator = pollValidator;
     }
 
     @Override
@@ -48,12 +49,14 @@ public class PollServiceImpl implements PollService {
 
     @Override
     public void createPoll(Poll poll) throws InvalidObjectException {
-        //sloji validator nqkoga
+        if(!pollValidator.isValid(poll)) {
+            throw new InvalidObjectException("Invalid poll");
+        }
         pollRepository.create(poll);
     }
 
     @Override
-    public void updatePoll(Poll poll) throws InvalidObjectException {
+    public void updatePoll(Poll poll) {
         pollRepository.update(poll);
     }
 

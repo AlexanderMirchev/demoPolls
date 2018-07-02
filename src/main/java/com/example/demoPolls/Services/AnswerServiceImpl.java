@@ -3,6 +3,7 @@ package com.example.demoPolls.Services;
 import com.example.demoPolls.Entities.Answer;
 import com.example.demoPolls.Repositories.base.GenericRepository;
 import com.example.demoPolls.Services.base.AnswerService;
+import com.example.demoPolls.Validators.base.Validator;
 import org.springframework.stereotype.Service;
 
 import java.io.InvalidObjectException;
@@ -13,7 +14,6 @@ import java.util.List;
 public class AnswerServiceImpl implements AnswerService {
     private final GenericRepository<Answer> answerRepository;
 
-    //sloji validator
     //Dependency injection
     public AnswerServiceImpl(GenericRepository<Answer> answerRepository) {
         this.answerRepository = answerRepository;
@@ -25,7 +25,7 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void createAnswer(Answer answer) throws InvalidObjectException {
+    public void createAnswer(Answer answer) {
         answerRepository.create(answer);
     }
 
@@ -35,7 +35,7 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void updateAnswer(Answer answer) throws InvalidObjectException {
+    public void updateAnswer(Answer answer) {
         answerRepository.update(answer);
     }
 }

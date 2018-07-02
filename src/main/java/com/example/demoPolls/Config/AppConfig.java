@@ -5,6 +5,7 @@ import com.example.demoPolls.Entities.Poll;
 import com.example.demoPolls.Entities.User;
 import com.example.demoPolls.Repositories.HibernateRepository;
 import com.example.demoPolls.Repositories.base.GenericRepository;
+import com.example.demoPolls.Validators.PollValidator;
 import com.example.demoPolls.Validators.UserValidator;
 import com.example.demoPolls.Validators.base.Validator;
 import org.hibernate.SessionFactory;
@@ -49,5 +50,7 @@ public class AppConfig {
     @Bean
     Validator<User> provideUserValidator() { return new UserValidator();}
 
+    @Bean
+    Validator<Poll> providePollValidator() { return new PollValidator(); }
 }
 

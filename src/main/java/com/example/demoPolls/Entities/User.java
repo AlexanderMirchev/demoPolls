@@ -8,7 +8,7 @@ import java.util.Set;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
@@ -18,16 +18,9 @@ public class User {
 
     //Mapping user and polls
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Poll> polls;
+    private Set<Poll> polls;
 
-    public User(int id, String username, String password, List<Poll> polls) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.polls = polls;
-    }
-
-    @ManyToMany(mappedBy = "usersList",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "usersList",fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<Poll> answeredPolls;
 
 
@@ -59,11 +52,11 @@ public class User {
         this.password = password;
     }
 
-    public List<Poll> getPolls() {
+    public Set<Poll> getPolls() {
         return polls;
     }
 
-    public void setPolls(List<Poll> polls) {
+    public void setPolls(Set<Poll> polls) {
         this.polls = polls;
     }
 

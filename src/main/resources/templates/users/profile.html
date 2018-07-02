@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
 </head>
-<body>
 <header>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default ">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand">Polls</a>
@@ -18,35 +17,63 @@
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    <a href="/polls/create">Create</a>
+                    <a href="/polls/createPoll">Create</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a sec:authorize="!isAuthenticated()" href="/" th:href="@{/login}"><span class="glyphicon glyphicon-log-in"></span> Log in</a></li>
                 <li><a sec:authorize="!isAuthenticated()" href="/" th:href="@{/auth/register}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
-                <li><a sec:authorize="isAuthenticated()" href="/" th:inline="text" th:href="@{'/users/' + ${#httpServletRequest.remoteUser}}"><span class="glyphicon glyphicon-log-out"></span> [[${#httpServletRequest.remoteUser}]]</a></li>
+                <li class="active"><a sec:authorize="isAuthenticated()" href="/" th:inline="text" th:href="@{'/users/' + ${#httpServletRequest.remoteUser}}"><span class="glyphicon glyphicon-log-out"></span> [[${#httpServletRequest.remoteUser}]]</a></li>
                 <li><a sec:authorize="isAuthenticated()" href="/" th:href="@{/logout}"><span class="glyphicon glyphicon-log-out"></span> Log out</a></li>
             </ul>
         </div>
     </nav>
 </header>
 <h2></h2>
-<div class="container-fluid">
-    <table class="table table-hover table-condensed">
-        <thead class = "thead-light">
-        <tr>
-            <th scope="col">Votes</th>
-            <th scope="col">Poll Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="poll: ${profile.getPolls()}">
-            <td><a th:text="${poll.getNumberOfVotes()}"></a></td>
-            <td class="click"><a th:href="@{'/polls/voting/vote/' + ${poll.getId()}}" th:text="${poll.getName()}"></a></td>
-        </tr>
 
-        </tbody>
-    </table>
+<div class="col-xs-6">
+    <h2 class="sub-header" th:text="${profile.getUsername()} + ' has created:'"></h2>
+    <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            <thead class = "thead-light">
+            <tr>
+                <th scope="col">Votes</th>
+                <th scope="col">Poll Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="poll: ${profile.getPolls()}">
+                <td><a th:text="${poll.getNumberOfVotes()}"></a></td>
+                <td class="click"><a th:href="@{'/polls/voting/vote/' + ${poll.getId()}}" th:text="${poll.getName()}"></a></td>
+            </tr>
+            </tbody>
+        </table>
+        <h4 th:if="${profile.getPolls().size() == 0}"> No polls can be listed.</h4>
+    </div>
+</div>
+
+<div class="col-xs-6">
+    <h2 class="sub-header" th:text="${profile.getUsername()} + ' has voted on:'"></h2>
+    <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            <thead class = "thead-light">
+            <tr>
+                <th scope="col">Votes</th>
+                <th scope="col">Poll Name</th>
+                <th scope="col">Poll Creator</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="poll: ${profile.getAnsweredPolls()}">
+                <td><a th:text="${poll.getNumberOfVotes()}"></a></td>
+                <td class="click"><a th:href="@{'/polls/voting/vote/' + ${poll.getId()}}" th:text="${poll.getName()}"></a></td>
+                <td class="click"><a th:href="@{'/users/' + ${poll.getUser().getUsername()}}" th:text="${poll.getUser().getUsername()}"></a></td>
+            </tr>
+
+            </tbody>
+        </table>
+        <h4 th:if="${profile.getAnsweredPolls().size() == 0}"> No polls can be listed.</h4>
+    </div>
 </div>
 </body>
 </html>

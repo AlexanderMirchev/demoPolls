@@ -2,16 +2,15 @@ package com.example.demoPolls.Web;
 
 import com.example.demoPolls.Entities.User;
 import com.example.demoPolls.Services.base.UsersService;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.InvalidObjectException;
+import java.security.AuthProvider;
 import java.security.Principal;
 
 @Controller
@@ -23,37 +22,30 @@ public class UsersController {
         this.usersService = usersService;
     }
 
-    @GetMapping("/auth/register")
-    public String register(Model model) {
-        model.addAttribute("user", new User());
-        return "/auth/register";
-    }
-
-    @GetMapping("/auth/register?error")
-    public String registerError(Model model) {
-        boolean error = true;
-
-        model.addAttribute("user", new User());
-        return "auth/register";
-    }
-
-    @GetMapping("/auth/register?username_taken")
-    public String registerUsernameTaken(Model model) {
-        boolean usernameTaken = true;
+    @RequestMapping(value = "/auth/register", method = RequestMethod.GET)
+    public String register(Model model,
+                           @RequestParam(value = "error", required = false) String error,
+                           @RequestParam(value = "username_taken",required = false) String username_taken) {
+        if(error!= null && error.equals("true")) {
+            model.addAttribute("error",true);
+        }
+        if(username_taken != null && username_taken.equals("true")) {
+            model.addAttribute("username_taken",true);
+        }
         model.addAttribute("user", new User());
         return "auth/register";
     }
 
     @PostMapping("/auth/register")
-    public String register(@ModelAttribute User user, Model model) {
+    public String register(@ModelAttribute User user, Model model, HttpServletRequest httpServletRequest) {
         try {
             usersService.create(user);
         } catch (InvalidObjectException e) {
-            model.addAttribute("error", true);
+            model.addAttribute("error",true);
             return "redirect:/auth/register";
         } catch (javax.persistence.PersistenceException  ex) {
             if(ex.getCause() instanceof org.hibernate.exception.ConstraintViolationException) {
-                model.addAttribute("usernameTaken", true);
+                model.addAttribute("username_taken",true);
                 return "redirect:/auth/register";
             }
         }

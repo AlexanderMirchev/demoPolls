@@ -81,7 +81,7 @@ public class HibernateRepository<T> implements GenericRepository<T> {
 
 
         session
-                .saveOrUpdate(entity);
+                .merge(entity);
 
 
         transaction.commit();

@@ -3,18 +3,18 @@
       xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Homepage: Newest Submissions</title>
+    <title>Error</title>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-default ">
+    <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand">Polls</a>
             </div>
             <ul class="nav navbar-nav">
-                <li class="active">
+                <li>
                     <a href="/">Home</a>
                 </li>
                 <li>
@@ -30,32 +30,10 @@
         </div>
     </nav>
 </header>
-<ul class="nav nav-pills">
-    <li class="active">
-        <a href="/">New</a>
-    </li>
-    <li>
-        <a href="/top">Top</a>
-    </li>
-</ul>
-<div class="container-fluid">
-<table class="table table-hover table-condensed">
-    <thead class = "thead-light">
-    <tr>
-        <th scope="col">Votes</th>
-        <th scope="col">Poll Name</th>
-        <th scope="col">Poll Creator</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr th:each="poll: ${polls}">
-            <td><a th:text="${poll.getNumberOfVotes()}"></a></td>
-            <td class="click"><a th:href="@{'/polls/voting/vote/' + ${poll.getId()}}" th:text="${poll.getName()}"></a></td>
-            <td class="click"><a th:href="@{'/users/' + ${poll.getUser().getUsername()}}" th:text="${poll.getUser().getUsername()}"></a></td>
-        </tr>
+<h1>The url you were trying to access doesn't exist</h1>
 
-    </tbody>
-</table>
-</div>
+<h2>
+    <a href="/">Go to homepage</a>
+</h2>
 </body>
 </html>

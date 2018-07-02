@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Answer  {
 
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO)
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private int id;
     public String name;
     private int numberOfVotes;

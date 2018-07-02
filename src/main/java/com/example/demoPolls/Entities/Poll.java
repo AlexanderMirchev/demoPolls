@@ -9,7 +9,7 @@ import java.util.Set;
 @Entity
 public class Poll {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     private String name;
@@ -23,9 +23,9 @@ public class Poll {
 
     //One to many mapping with answers
     @OneToMany(mappedBy = "poll", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Answer> answerList;
+    private Set<Answer> answerList;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable (
             name = "USERS_POLLS",
             joinColumns = @JoinColumn(name = "POLL_ID", referencedColumnName = "id"),
@@ -57,11 +57,11 @@ public class Poll {
         this.user = user;
     }
 
-    public List<Answer> getAnswerList() {
+    public Set<Answer> getAnswerList() {
         return answerList;
     }
 
-    public void setAnswerList(List<Answer> answerList) {
+    public void setAnswerList(Set<Answer> answerList) {
         this.answerList = answerList;
     }
 

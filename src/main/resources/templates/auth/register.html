@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns="www.thymeleaf.org" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.hibernate.org/xsd/hibernate-mapping">
 <head>
     <head>
         <meta charset="UTF-8">
+        <title>Register</title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <meta sec:authorize="isAuthenticated()" http-equiv="refresh" content="0;url=/error" />
     </head>
 <body>
 <header>
@@ -27,7 +30,7 @@
     Registration failed: Username must be between 3 and 20 symbols and the password must be between 6 and 20 symbols.
 </div>
 
-<div th:if="${usernameTaken}" class="alert alert-danger" role="alert">
+<div th:if="${username_taken}" class="alert alert-danger" role="alert">
     Registration failed: Username taken.
 </div>
 

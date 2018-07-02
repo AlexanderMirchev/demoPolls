@@ -10,7 +10,7 @@
 </head>
 <body>
 <header>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default ">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand">Polls</a>
@@ -19,8 +19,8 @@
                 <li>
                     <a href="/">Home</a>
                 </li>
-                <li class = "active">
-                    <a href="/polls/create">Create</a>
+                <li class="active">
+                    <a href="/polls/createPoll">Create</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -32,6 +32,11 @@
         </div>
     </nav>
 </header>
+
+<div th:if="${error}" class="alert alert-danger" role="alert">
+    Poll failed to create: Poll must have at least two options and every input must be filled.
+</div>
+
 <div class="container">
     <div class="col-md-6">
     <div class="form-group">
@@ -45,7 +50,7 @@
                     </thead>
                     <tr class="h3" >Poll Options</tr>
                 </table>
-                <button type="button" name="add" id="add" class="btn btn-success">Add More</button>
+                <button type="button" name="add" id="add" class="btn btn-success">Add Option</button>
                 <input type = "submit" id="btn-login" class="btn btn-success" value = "Submit"  />
                 <span></span>
             </div>

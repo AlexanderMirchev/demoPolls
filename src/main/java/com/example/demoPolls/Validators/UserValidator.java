@@ -8,10 +8,6 @@ public class UserValidator implements Validator<User> {
     private final int MAX_USERNAME_LENGTH = 20;
     private final int MIN_PASSWORD_LENGTH = 6;
     private final int MAX_PASSWORD_LENGTH = 20;
-//
-//    public UserValidator (){}
-//    @Autowired
-//    private GenericRepository<User> usersRepository;
 
     @Override
     public boolean isValid(User user) {
@@ -20,11 +16,6 @@ public class UserValidator implements Validator<User> {
     }
 
     private boolean isUsernameValid(String username) {
-//        List<String> usernames = new ArrayList<>();
-//        usersRepository.getAll().forEach(user -> usernames.add(user.getUsername()));
-//        if(usernames.contains(username)) {
-//            return false;
-//        }
         return username != null &&
                 username.length() >= MIN_USERNAME_LENGTH &&
                 username.length() <= MAX_USERNAME_LENGTH;

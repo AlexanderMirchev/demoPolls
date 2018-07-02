@@ -34,25 +34,18 @@ public class VoteController {
 
         User user = usersService.getUserByUsername(principal.getName());
         Poll poll = pollService.getPollById(Integer.parseInt(id));
-
+        model.addAttribute("poll", poll);
         List<String> userListNames = new ArrayList<>();
         poll.getUsersList().forEach(user1 -> userListNames.add(user1.getUsername()));
         if(userListNames.contains(user.getUsername())) {
-            model.addAttribute("poll", poll);
             model.addAttribute("hasVoted", true);
             return "polls/voting/results";
         }
         if(user.getId() == poll.getUser().getId()) {
-            if(poll.getNumberOfVotes() == 0) {
-                poll.setNumberOfVotes(1);
-            }
-            boolean isCreator = true;
-            model.addAttribute("poll", poll);
             model.addAttribute("isCreator", true);
             return "polls/voting/results";
         }
 
-        model.addAttribute("poll", poll);
         return "polls/voting/vote";
     }
 
@@ -77,10 +70,6 @@ public class VoteController {
         poll.setNumberOfVotes(numberOfVotes);
         pollService.updatePoll(poll);
 
-        List <Answer> answers = poll.getAnswerList();
-        Collections.sort(answers,
-                Comparator.comparingInt(Answer::getNumberOfVotes).reversed());
-        poll.setAnswerList(answers);
         model.addAttribute("poll", poll);
         return "polls/voting/results";
     }
@@ -89,10 +78,6 @@ public class VoteController {
     public String resultsOnly(@PathVariable String poll_id,
                               Model model) {
         Poll poll = pollService.getPollById(Integer.parseInt(poll_id));
-        List <Answer> answers = poll.getAnswerList();
-        Collections.sort(answers,
-                Comparator.comparingInt(Answer::getNumberOfVotes).reversed());
-        poll.setAnswerList(answers);
         model.addAttribute("poll", poll);
         return "polls/voting/results";
 

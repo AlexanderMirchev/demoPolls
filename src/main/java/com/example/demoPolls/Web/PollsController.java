@@ -10,15 +10,14 @@ import com.example.demoPolls.Services.base.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.InvalidObjectException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Controller
 @RequestMapping("/polls")
@@ -30,8 +29,12 @@ public class PollsController {
     @Autowired
     private AnswerService answerService;
 
-    @GetMapping("/createPoll")
-    public String createPoll(Model model) {
+    @RequestMapping(value = "/createPoll", method = RequestMethod.GET)
+    public String createPoll(Model model,
+                             @RequestParam (value = "error", required = false) String error) {
+        if (error != null && error.equals("true")) {
+            model.addAttribute("error",true);
+        }
         Poll poll = new Poll();
         model.addAttribute("poll", poll);
         AnswerForm answers = new AnswerForm();
@@ -43,12 +46,13 @@ public class PollsController {
     public String createPoll(
         @ModelAttribute Poll poll,
         @ModelAttribute AnswerForm answers,
-        Principal principal
+        Principal principal,
+        Model model
     ) {
         try {
             User user = usersService.getUserByUsername(principal.getName());
             poll.setUser(user);
-            List<Answer> answerList = new ArrayList<>();
+            Set<Answer> answerList = new HashSet<>();
             answers.getAnswers()
                     .forEach(answer -> answerList.add(new Answer(answer)));
             answerList.forEach(answer -> answer.setPoll(poll));
@@ -56,6 +60,7 @@ public class PollsController {
             pollService.createPoll(poll);
             return "redirect:/";
         } catch (InvalidObjectException e) {
+            model.addAttribute("error",true);
             return "redirect:/polls/createPoll";
         }
     }
